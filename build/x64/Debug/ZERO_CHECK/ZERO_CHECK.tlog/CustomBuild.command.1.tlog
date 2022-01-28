@@ -1,0 +1,10 @@
+^C:\USERS\ADRIE\DESKTOP\ADRIEN\CODE\PARALLEL-SHOOTER\BUILD\CMAKEFILES\122E64C496E2BC4E22FE869A5E0D4E10\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/adrie/Desktop/Adrien/Code/Parallel-Shooter -BC:/Users/adrie/Desktop/Adrien/Code/Parallel-Shooter/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/adrie/Desktop/Adrien/Code/Parallel-Shooter/build/APP.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
