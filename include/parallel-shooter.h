@@ -19,6 +19,7 @@ void initWhitePlayer        (DisplayableObject *whitePlayer);
 void initBlackBackground    (DisplayableObject *blackBackground);
 void initWhiteBackground    (DisplayableObject *whiteBackground);
 void blackPlayerMovement    (GameObject *self);
+void whitePlayerMovement    (GameObject *self);
 
 // Different scenes and their names
 #define MENU_SCENE ("menu")
@@ -26,3 +27,4 @@ void blackPlayerMovement    (GameObject *self);
 #define OPTIONS_SCENE ("options")
 #define CREDITS_SCENE ("credits")
 #define END_SCENE ("gameEnd")
+#define ROTATE_SPEED (5.f)
