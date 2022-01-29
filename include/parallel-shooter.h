@@ -19,6 +19,8 @@ void initWhitePlayer        (DisplayableObject *whitePlayer);
 void initBlackBackground    (DisplayableObject *blackBackground);
 void initWhiteBackground    (DisplayableObject *whiteBackground);
 void blackPlayerMovement    (GameObject *self);
+void initEnnemies           (App &app, DisplayableObject *blackPlayer, DisplayableObject *whitePlayer);
+void ennemyMovement         (GameObject *self);
 
 // Different scenes and their names
 #define MENU_SCENE ("menu")
