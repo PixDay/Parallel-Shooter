@@ -1,4 +1,6 @@
 #include "parallel-shooter.h"
+#include <iostream>
+#include <cmath>
 
 void InitGame(App &app)
 {
@@ -14,6 +16,8 @@ void InitGame(App &app)
     initEnnemies(app, blackPlayer, whitePlayer);
   
     blackPlayer->setFunction(&blackPlayerMovement);
+
+    whitePlayer->setFunction(&whitePlayerMovement);
 
     app.addObjectTo(blackBackground, GAME_SCENE);
     app.addObjectTo(whiteBackground, GAME_SCENE);
@@ -46,14 +50,6 @@ void initWhitePlayer(DisplayableObject *whitePlayer)
     whitePlayer->setAngle(0.0f);
 }
 
-void initBlackBackground(DisplayableObject *blackBackground)
-{
-    sf::Vector2f position = {0.0f, 0.0f};
-
-    blackBackground->setPosition(position);
-}
-
-
 void initWhiteBackground(DisplayableObject *whiteBackground)
 {
     sf::Vector2f position = {960.0f, 0.0f};
@@ -61,14 +57,14 @@ void initWhiteBackground(DisplayableObject *whiteBackground)
     whiteBackground->setPosition(position);
 }
 
-void blackPlayerMovement(GameObject *self)
+void whitePlayerMovement(GameObject *self)
 {
     sf::Vector2f position = self->getPosition();
     sf::Vector2f vector = {0.0f, 0.0f};
 
     // Calculate the vector based on angle of black player
-    //vector.x = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
-    //vector.y = sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+    vector.x = sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+    vector.y = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
         position.y -= self->getSpeed() * vector.y;
@@ -80,9 +76,43 @@ void blackPlayerMovement(GameObject *self)
         position.x += self->getSpeed() * vector.x;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() + 1.5f);
+        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() + ROTATE_SPEED);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() - 1.5f);
+        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() - ROTATE_SPEED);
+    position.y = (position.y < 0.0f) ? 0.0f : (position.y > 1080.0f) ? 1080.0f : position.y;
+    static_cast<DisplayableObject *>(self)->setPosition(position);
+}
+
+
+void initBlackBackground(DisplayableObject *blackBackground)
+{
+    sf::Vector2f position = {0.0f, 0.0f};
+
+    blackBackground->setPosition(position);
+}
+
+void blackPlayerMovement(GameObject *self)
+{
+    sf::Vector2f position = self->getPosition();
+    sf::Vector2f vector = {0.0f, 0.0f};
+
+    // Calculate the vector based on angle of black player
+    vector.x = - sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+    vector.y = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        position.y -= self->getSpeed() * vector.y;
+        position.x -= self->getSpeed() * vector.x;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    {
+        position.y += self->getSpeed() * vector.y;
+        position.x += self->getSpeed() * vector.x;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() + ROTATE_SPEED);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() - ROTATE_SPEED);
     position.y = (position.y < 0.0f) ? 0.0f : (position.y > 1080.0f) ? 1080.0f : position.y;
     static_cast<DisplayableObject *>(self)->setPosition(position);
 }
