@@ -13,6 +13,9 @@ void CreateScenes(App &app);
 void InitMenu(App &app);
 
 // Function : game.cpp
-void InitGame(App &app);
-
+void InitGame               (App &app);
+void initBlackPLayer        (DisplayableObject *blackPlayer);
+void initWhitePLayer        (DisplayableObject *whitePlayer);
+void initBlackBackground    (DisplayableObject *blackBackground);
+void initWhiteBackground    (DisplayableObject *whiteBackground);
 
