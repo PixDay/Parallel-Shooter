@@ -22,9 +22,15 @@ void blackPlayerMovement    (GameObject *self);
 void whitePlayerMovement    (GameObject *self);
 
 // Different scenes and their names
-#define MENU_SCENE ("menu")
-#define GAME_SCENE ("game")
-#define OPTIONS_SCENE ("options")
-#define CREDITS_SCENE ("credits")
-#define END_SCENE ("gameEnd")
-#define ROTATE_SPEED (5.f)
+#define MENU_SCENE          ("menu")
+#define GAME_SCENE          ("game")
+#define OPTIONS_SCENE       ("options")
+#define CREDITS_SCENE       ("credits")
+#define END_SCENE           ("gameEnd")
+
+// Player specific defines
+#define ROTATE_SPEED        (5.f)
+
+// Menu Button sizes
+#define MENU_BUTTON_SIZE_X  (220)
+#define MENU_BUTTON_SIZE_Y  (120)
