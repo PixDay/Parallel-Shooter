@@ -13,7 +13,6 @@ SET(APP_EXE application)
 INCLUDE_DIRECTORIES (
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/lib/cpp-core/include
-    ${CMAKE_SOURCE_DIR}/lib/cpp-ui/include
     ${CMAKE_SOURCE_DIR}/GFX/SFML-2.5.1/include
 )
 
@@ -23,5 +22,4 @@ ADD_EXECUTABLE(${APP_EXE}
 
 TARGET_LINK_LIBRARIES(${APP_EXE}
     cpp-core
-    cpp-ui
 )

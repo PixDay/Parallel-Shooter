@@ -1,4 +1,4 @@
-#include "shooter.h"
+#include "parallel-shooter.h"
 
 void player(GameObject *self)
 {
