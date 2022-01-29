@@ -1,4 +1,5 @@
 #include "parallel-shooter.h"
+#include <iostream>
 
 void InitGame(App &app)
 {
@@ -7,46 +8,81 @@ void InitGame(App &app)
     DisplayableObject *blackBackground = new DisplayableObject("img/black-background.png");
     DisplayableObject *whiteBackground = new DisplayableObject("img/white-background.png");
 
-    initBlackPLayer(blackPlayer);
+    initBlackPlayer(blackPlayer);
     initWhitePlayer(whitePlayer);
     initBlackBackground(blackBackground);
     initWhiteBackground(whiteBackground);
 
-    app.addObjectTo(blackPlayer, GAME_SCENE);
-    app.addObjectTo(whitePlayer, GAME_SCENE);
+    blackPlayer->setFunction(&blackPlayerMovement);
+
     app.addObjectTo(blackBackground, GAME_SCENE);
     app.addObjectTo(whiteBackground, GAME_SCENE);
+    app.addObjectTo(blackPlayer, GAME_SCENE);
+    app.addObjectTo(whitePlayer, GAME_SCENE);
+    
 }
 
-void initBlackPLayer(DisplayableObject *blackPlayer)
+void initBlackPlayer(DisplayableObject *blackPlayer)
 {
-    sf::Vector2f position = {0.0f, 0.0f};
+    sf::Vector2f position = {1390.0f, 490.0f};
+    sf::Vector2f origin = {50.0f, 50.0f};
+    sf::Vector2f scale = {0.3f, 0.3f};
 
     blackPlayer->setPosition(position);
+    blackPlayer->setOrigin(origin);
+    blackPlayer->setScale(scale);
+    blackPlayer->setAngle(0.0f);
 }
 
-void initWhitePLayer(DisplayableObject *whitePlayer)
+void initWhitePlayer(DisplayableObject *whitePlayer)
 {
-    sf::Vector2f position = {960.0f, 0.0f};
+    sf::Vector2f position = {430.0f, 490.0f};
+    sf::Vector2f origin = {50.0f, 50.0f};
+    sf::Vector2f scale = {0.3f, 0.3f};
 
     whitePlayer->setPosition(position);
+    whitePlayer->setOrigin(origin);
+    whitePlayer->setScale(scale);
+    whitePlayer->setAngle(0.0f);
 }
 
 void initBlackBackground(DisplayableObject *blackBackground)
 {
-    sf::Vector2f position = {430.0f, 490.0f};
-    sf::Vector2f origin = {50.0f, 50.0f};
+    sf::Vector2f position = {0.0f, 0.0f};
 
     blackBackground->setPosition(position);
-    blackBackground->setOrigin(origin);
 }
 
 
 void initWhiteBackground(DisplayableObject *whiteBackground)
 {
-    sf::Vector2f position = {860.0f, 490.0f};
-    sf::Vector2f origin = {50.0f, 50.0f};
+    sf::Vector2f position = {960.0f, 0.0f};
 
     whiteBackground->setPosition(position);
-    whiteBackground->setOrigin(origin);
+}
+
+void blackPlayerMovement(GameObject *self)
+{
+    sf::Vector2f position = self->getPosition();
+    sf::Vector2f vector = {0.0f, 0.0f};
+
+    // Calculate the vector based on angle of black player
+    vector.x = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+    vector.y = sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+        position.y -= self->getSpeed() * vector.y;
+        position.x -= self->getSpeed() * vector.x;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
+        position.y += self->getSpeed() * vector.y;
+        position.x += self->getSpeed() * vector.x;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() + 1.5f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() - 1.5f);
+    position.y = (position.y < 0.0f) ? 0.0f : (position.y > 1080.0f) ? 1080.0f : position.y;
+    static_cast<DisplayableObject *>(self)->setPosition(position);
 }

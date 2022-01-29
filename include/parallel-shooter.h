@@ -14,12 +14,11 @@ void InitMenu(App &app);
 
 // Function : game.cpp
 void InitGame               (App &app);
-void initBlackPLayer        (DisplayableObject *blackPlayer);
-void initWhitePLayer        (DisplayableObject *whitePlayer);
+void initBlackPlayer        (DisplayableObject *blackPlayer);
+void initWhitePlayer        (DisplayableObject *whitePlayer);
 void initBlackBackground    (DisplayableObject *blackBackground);
 void initWhiteBackground    (DisplayableObject *whiteBackground);
-
-void InitGame(App &app);
+void blackPlayerMovement    (GameObject *self);
 
 // Different scenes and their names
 #define MENU_SCENE ("menu")
