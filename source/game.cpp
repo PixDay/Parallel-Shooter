@@ -19,6 +19,10 @@ void InitGame(App &app)
 
     whitePlayer->setFunction(&whitePlayerMovement);
 
+    blackBackground->setLayout(1);
+    whiteBackground->setLayout(1);
+    whitePlayer->setLayout(2);
+    blackPlayer->setLayout(2);
     app.addObjectTo(blackBackground, GAME_SCENE);
     app.addObjectTo(whiteBackground, GAME_SCENE);
     app.addObjectTo(blackPlayer, GAME_SCENE);
@@ -128,8 +132,8 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
     {
         for (int j = 0; j < 10 + i; j++)
         {
-            randX = rand() % 50 - 50;
-            randY = (randX < -25.0f) ? rand() % 50 - 75 : rand() % 50 + 1125.0f;
+            randX = rand() % 960 - 960;
+            randY = (randX < 0.0f) ? rand() % 50 - 75 : rand() % 50 + 1125.0f;
             DisplayableObject *ennemy = new DisplayableObject("img/whiteEnnemy.png");
             sf::Vector2f position = {randX, randY};
             sf::Vector2f origin = {50.0f, 50.0f};
@@ -139,7 +143,9 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->setOrigin(origin);
             ennemy->setScale(scale);
             ennemy->setAngle(0.0f);
-            ennemy->addObject(blackPlayer);
+            ennemy->addObject(whitePlayer);
+            ennemy->setSpeed(0.11f);
+            ennemy->setLayout(2);
             ennemy->setTag("ennemy_white_" + std::to_string(i + 1));
             if (i > 0)
                 ennemy->setActive(false);
@@ -152,8 +158,8 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
     {
         for (int j = 0; j < 10 + i; j++)
         {
-            randX = rand() % 50 + 1945;
-            randY = (randX > 1970.0f) ? rand() % 50 - 75 : rand() % 50 + 1125.0f;
+            randX = rand() % 960 + 960;
+            randY = (randX > 1920.0f) ? rand() % 50 - 75 : rand() % 50 + 1125.0f;
             DisplayableObject *ennemy = new DisplayableObject("img/blackEnnemy.png");
             sf::Vector2f position = {randX, randY};
             sf::Vector2f origin = {50.0f, 50.0f};
@@ -163,7 +169,9 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->setOrigin(origin);
             ennemy->setScale(scale);
             ennemy->setAngle(0.0f);
-            ennemy->addObject(whitePlayer);
+            ennemy->addObject(blackPlayer);
+            ennemy->setSpeed(0.11f);
+            ennemy->setLayout(2);
             ennemy->setTag("ennemy_black_" + std::to_string(i + 1));
             if (i > 0)
                 ennemy->setActive(false);
