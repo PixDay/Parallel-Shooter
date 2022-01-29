@@ -62,7 +62,7 @@ void whitePlayerMovement(GameObject *self)
     sf::Vector2f vector = {0.0f, 0.0f};
 
     // Calculate the vector based on angle of black player
-    vector.x = sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+    vector.x = - sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
     vector.y = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
@@ -78,7 +78,14 @@ void whitePlayerMovement(GameObject *self)
         static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() + ROTATE_SPEED);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
         static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() - ROTATE_SPEED);
-    position.y = (position.y < 0.0f) ? 0.0f : (position.y > 1080.0f) ? 1080.0f : position.y;
+
+    const float minX = 0.0f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxX = 960.f - PLAYER_SIZE_PIXEL / 4.f;
+    const float minY = 0.0f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxY = 1080.0f - PLAYER_SIZE_PIXEL / 4.f;
+
+    position.x = (position.x < minX) ? minX : (position.x > maxX) ? maxX : position.x;
+    position.y = (position.y < minY) ? minY : (position.y > maxY) ? maxY : position.y;
     static_cast<DisplayableObject *>(self)->setPosition(position);
 }
 
@@ -112,6 +119,14 @@ void blackPlayerMovement(GameObject *self)
         static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() + ROTATE_SPEED);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         static_cast<DisplayableObject *>(self)->setAngle(static_cast<DisplayableObject *>(self)->getAngle() - ROTATE_SPEED);
-    position.y = (position.y < 0.0f) ? 0.0f : (position.y > 1080.0f) ? 1080.0f : position.y;
+
+    const float minX = 960.f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxX = 1920.f - PLAYER_SIZE_PIXEL / 4.f;
+    const float minY = 0.0f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxY = 1080.0f - PLAYER_SIZE_PIXEL / 4.f;
+
+    position.x = (position.x < minX) ? minX : (position.x > maxX) ? maxX : position.x;
+    position.y = (position.y < minY) ? minY : (position.y > maxY) ? maxY : position.y;
+
     static_cast<DisplayableObject *>(self)->setPosition(position);
 }

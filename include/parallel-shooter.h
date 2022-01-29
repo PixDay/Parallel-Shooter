@@ -27,4 +27,11 @@ void whitePlayerMovement    (GameObject *self);
 #define OPTIONS_SCENE ("options")
 #define CREDITS_SCENE ("credits")
 #define END_SCENE ("gameEnd")
+
+#define _SPEED (5.f)
+
+//Sprite
+#define PLAYER_SIZE_PIXEL (100.f)
+
+//Gameplay
 #define ROTATE_SPEED (5.f)
