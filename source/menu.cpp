@@ -29,4 +29,8 @@ void InitMenu(App &app)
     playButton->setPosition(playButtonPosition);
     creditsButton->setPosition(creditsButtonPosition);
     exitButton->setPosition(exitButtonPosition);
+
+    app.addObject(playButton);
+    app.addObject(creditsButton);
+    app.addObject(exitButton);
 }
