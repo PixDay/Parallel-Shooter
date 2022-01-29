@@ -7,7 +7,10 @@
 
 CC	=	g++
 
-SRC	=	source/main.cpp
+SRC	=	source/main.cpp \
+		source/game.cpp \
+		source/menu.cpp \
+		source/scene.cpp \
 
 OBJECTS =	${SRC:.cpp=.o}
 

@@ -19,3 +19,11 @@ void initWhitePLayer        (DisplayableObject *whitePlayer);
 void initBlackBackground    (DisplayableObject *blackBackground);
 void initWhiteBackground    (DisplayableObject *whiteBackground);
 
+void InitGame(App &app);
+
+// Different scenes and their names
+#define MENU_SCENE ("menu")
+#define GAME_SCENE ("game")
+#define OPTIONS_SCENE ("options")
+#define CREDITS_SCENE ("credits")
+#define END_SCENE ("gameEnd")
