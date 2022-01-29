@@ -1,12 +1,13 @@
 #include "parallel-shooter.h"
 #include <iostream>
+#include <cmath>
 
 void InitGame(App &app)
 {
-    DisplayableObject *blackPlayer = new DisplayableObject("img/black-player.png");
-    DisplayableObject *whitePlayer = new DisplayableObject("img/white-player.png");
-    DisplayableObject *blackBackground = new DisplayableObject("img/black-background.png");
-    DisplayableObject *whiteBackground = new DisplayableObject("img/white-background.png");
+    DisplayableObject *blackPlayer = new DisplayableObject("./img/blackPlayer.png");
+    DisplayableObject *whitePlayer = new DisplayableObject("./img/whitePlayer.png");
+    DisplayableObject *blackBackground = new DisplayableObject("./img/blackBackground.png");
+    DisplayableObject *whiteBackground = new DisplayableObject("./img/whiteBackground.png");
 
     initBlackPlayer(blackPlayer);
     initWhitePlayer(whitePlayer);
