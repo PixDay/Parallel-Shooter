@@ -7,4 +7,5 @@ void CreateScenes(App &app)
     app.addScene(OPTIONS_SCENE);
     app.addScene(CREDITS_SCENE);
     app.addScene(END_SCENE);
+    app.setCurrentScene(MENU_SCENE);
 }
