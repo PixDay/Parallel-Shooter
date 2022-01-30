@@ -27,6 +27,7 @@ void blackPlayerMovement    (GameObject *self);
 void whitePlayerAttack      (GameObject *self);
 void blackPlayerAttack      (GameObject *self);
 void blackBulletUpdate      (GameObject *self);
+void ennemyCollide          (GameObject *self, GameObject *collided);
 
 // Different scenes and their names
 #define MENU_SCENE ("menu")

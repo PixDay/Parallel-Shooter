@@ -4,12 +4,12 @@
 
 void InitGame(App &app)
 {
-    DisplayableObject *blackPlayer = new DisplayableObject("img/black-player.png", &blackPlayerUpdate);
-    DisplayableObject *whitePlayer = new DisplayableObject("img/white-player.png", &whitePlayerUpdate);
-    DisplayableObject *blackBackground = new DisplayableObject("img/black-background.png");
-    DisplayableObject *whiteBackground = new DisplayableObject("img/white-background.png");
+    DisplayableObject *blackPlayer = new DisplayableObject("img/blackPlayer.png", &blackPlayerUpdate);
+    DisplayableObject *whitePlayer = new DisplayableObject("img/whitePlayer.png", &whitePlayerUpdate);
+    DisplayableObject *blackBackground = new DisplayableObject("img/blackBackground.png");
+    DisplayableObject *whiteBackground = new DisplayableObject("img/whiteBackground.png");
 
-    DisplayableObject *blackBullet = new DisplayableObject("img/black-bullet.png", &blackBulletUpdate);
+    DisplayableObject *blackBullet = new DisplayableObject("img/blackBullet.png", &blackBulletUpdate);
 
     initBlackPlayer(blackPlayer, blackBullet);
     initWhitePlayer(whitePlayer);
@@ -44,6 +44,7 @@ void initBlackPlayer(DisplayableObject *blackPlayer, DisplayableObject * blackBu
     blackPlayer->setAngle(0.0f);
     
     blackPlayer->addObject(blackBullet);
+    blackPlayer->setTag("blackPlayer");
 }
 
 void initWhitePlayer(DisplayableObject *whitePlayer)
@@ -56,6 +57,7 @@ void initWhitePlayer(DisplayableObject *whitePlayer)
     whitePlayer->setOrigin(origin);
     whitePlayer->setScale(scale);
     whitePlayer->setAngle(0.0f);
+    whitePlayer->setTag("whitePlayer");
 }
 
 void initBlackBackground(DisplayableObject *blackBackground)
@@ -231,13 +233,19 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->addObject(whitePlayer);
             ennemy->setSpeed(0.11f);
             ennemy->setLayout(2);
-            ennemy->setTag("ennemy_white_" + std::to_string(i + 1));
+            ennemy->setOnCollide(&ennemyCollide);
+            ennemy->setTag("ew" + std::to_string(i + 1) + std::to_string(j));
+            //app.addCollisionPair("ew" + std::to_string(i + 1) + std::to_string(j), "whitePlayer");
             if (i > 0)
                 ennemy->setActive(false);
             ennemy->setFunction(&ennemyMovement);
             app.addObjectTo(ennemy, GAME_SCENE);
         }
     }
+    app.addCollisionPair("whitePlayer", "ew1");
+    app.addCollisionPair("whitePlayer", "ew2");
+    app.addCollisionPair("whitePlayer", "ew3");
+    app.addCollisionPair("whitePlayer", "ew4");
     // Generate black ennemies (right of the screen)
     for (int i = 0; i < 10; i++)
     {
@@ -257,7 +265,9 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->addObject(blackPlayer);
             ennemy->setSpeed(0.11f);
             ennemy->setLayout(2);
-            ennemy->setTag("ennemy_black_" + std::to_string(i + 1));
+            ennemy->setOnCollide(&ennemyCollide);
+            ennemy->setTag("eb" + std::to_string(i + 1) + std::to_string(j));
+            //app.addCollisionPair("eb" + std::to_string(i + 1) + std::to_string(j), "blackPlayer");
             if (i > 0)
                 ennemy->setActive(false);
             ennemy->setFunction(&ennemyMovement);
@@ -280,4 +290,9 @@ void ennemyMovement(GameObject *self)
     else
         position.y += self->getSpeed();
     static_cast<DisplayableObject *>(self)->setPosition(position);
+}
+
+void ennemyCollide(GameObject *self, GameObject *collided)
+{
+    self->setActive(false);
 }
