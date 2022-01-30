@@ -1,5 +1,4 @@
 #include "parallel-shooter.h"
-#include <unistd.h>
 
 // X = 220, Y = 120
 

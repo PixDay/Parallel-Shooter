@@ -10,9 +10,16 @@ void InitGame(App &app)
     DisplayableObject *whiteBackground = new DisplayableObject("img/whiteBackground.png");
 
     DisplayableObject *blackBullet = new DisplayableObject("img/blackBullet.png", &blackBulletUpdate);
+    DisplayableObject *whiteBullet = new DisplayableObject("img/whiteBullet.png", &whiteBulletUpdate);
+
+    TextObject* blackPlayerScore = new TextObject("0");
+    TextObject* whitePlayerScore = new TextObject("0");
+
+    blackBullet->addObject(blackPlayerScore);
+    whiteBullet->addObject(whitePlayerScore);
 
     initBlackPlayer(blackPlayer, blackBullet);
-    initWhitePlayer(whitePlayer);
+    initWhitePlayer(whitePlayer, whiteBullet);
     initBlackBackground(blackBackground);
     initWhiteBackground(whiteBackground);
     initEnnemies(app, blackPlayer, whitePlayer);
@@ -22,6 +29,13 @@ void InitGame(App &app)
     whiteBackground->setLayout(1);
     whitePlayer->setLayout(2);
     blackPlayer->setLayout(2);
+    blackPlayerScore->setLayout(5);
+    whitePlayerScore->setLayout(5);
+
+    blackPlayerScore->setPosition({970.f, 10.f});
+    whitePlayerScore->setPosition({10.f, 10.f});
+
+    blackPlayerScore->setColor(0x000000);
 
     app.addObjectTo(blackBackground, GAME_SCENE);
     app.addObjectTo(whiteBackground, GAME_SCENE);
@@ -30,6 +44,10 @@ void InitGame(App &app)
     app.addObjectTo(whitePlayer, GAME_SCENE);  
 
     app.addObjectTo(blackBullet, GAME_SCENE);  
+    app.addObjectTo(whiteBullet, GAME_SCENE);
+
+    app.addObjectTo(blackPlayerScore, GAME_SCENE);
+    app.addObjectTo(whitePlayerScore, GAME_SCENE);
 }
 
 void initBlackPlayer(DisplayableObject *blackPlayer, DisplayableObject * blackBullet)
@@ -45,9 +63,12 @@ void initBlackPlayer(DisplayableObject *blackPlayer, DisplayableObject * blackBu
     
     blackPlayer->addObject(blackBullet);
     blackPlayer->setTag("blackPlayer");
+
+    blackBullet->setLayout(3);
+    blackBullet->setTag("blackbullet");
 }
 
-void initWhitePlayer(DisplayableObject *whitePlayer)
+void initWhitePlayer(DisplayableObject *whitePlayer, DisplayableObject * whiteBullet)
 {
     sf::Vector2f position = {430.0f, 490.0f};
     sf::Vector2f origin = {50.0f, 50.0f};
@@ -57,7 +78,12 @@ void initWhitePlayer(DisplayableObject *whitePlayer)
     whitePlayer->setOrigin(origin);
     whitePlayer->setScale(scale);
     whitePlayer->setAngle(0.0f);
+
+    whitePlayer->addObject(whiteBullet);
     whitePlayer->setTag("whitePlayer");
+
+    whiteBullet->setLayout(3);
+    whiteBullet->setTag("whitebullet");
 }
 
 void initBlackBackground(DisplayableObject *blackBackground)
@@ -99,7 +125,6 @@ void whitePlayerMovement(GameObject *self)
     sf::Vector2f position = self->getPosition();
     sf::Vector2f vector = {0.0f, 0.0f};
 
-    // Calculate the vector based on angle of black player
     vector.x = - sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
     vector.y = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
 
@@ -163,7 +188,15 @@ void blackPlayerMovement(GameObject *self)
 
 void whitePlayerAttack(GameObject *self)
 {
-    std::cout << "white attacked" << std::endl;
+    DisplayableObject * bullet = static_cast<DisplayableObject *>(self)->getObjects()[0];
+    bullet->setActive(true);
+    sf::Vector2f position = {self->getPosition().x, self->getPosition().y};
+    sf::Vector2f origin = {3.0f, 8.0f};
+
+    bullet->setPosition(position);
+    bullet->setOrigin(origin);
+    bullet->setAngle(static_cast<DisplayableObject *>(self)->getAngle());
+    bullet->setSpeed(10.f);
 }
 
 void blackPlayerAttack(GameObject *self)
@@ -177,8 +210,6 @@ void blackPlayerAttack(GameObject *self)
     bullet->setOrigin(origin);
     bullet->setAngle(static_cast<DisplayableObject *>(self)->getAngle());
     bullet->setSpeed(10.f);
-    bullet->setLayout(3);
-    bullet->setTag("bullet_black_bullet");
 }
 
 void blackBulletUpdate(GameObject *self)
@@ -195,7 +226,7 @@ void blackBulletUpdate(GameObject *self)
 
     static_cast<DisplayableObject *>(self)->setPosition(position);
 
-    const float minX = 960.f + PLAYER_SIZE_PIXEL / 4.f;
+    const float minX = 0.f + PLAYER_SIZE_PIXEL / 4.f;
     const float maxX = 1920.f - PLAYER_SIZE_PIXEL / 4.f;
     const float minY = 0.0f + PLAYER_SIZE_PIXEL / 4.f;
     const float maxY = 1080.0f - PLAYER_SIZE_PIXEL / 4.f;
@@ -208,6 +239,35 @@ void blackBulletUpdate(GameObject *self)
     }
 }
 
+void whiteBulletUpdate(GameObject *self)
+{
+    sf::Vector2f position = self->getPosition();
+    sf::Vector2f vector = {0.0f, 0.0f};
+
+    // Calculate the vector based on angle of black player
+    vector.x = - sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+    vector.y = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+
+    position.y -= self->getSpeed() * vector.y;
+    position.x -= self->getSpeed() * vector.x;
+
+    static_cast<DisplayableObject *>(self)->setPosition(position);
+
+    const float minX = 0.f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxX = 1920.f - PLAYER_SIZE_PIXEL / 4.f;
+    const float minY = 0.0f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxY = 1080.0f - PLAYER_SIZE_PIXEL / 4.f;
+
+    if(position.x > minX && position.x < maxX && position.y > minY && position.y < maxY)
+    {
+        self->setActive(true); 
+    }
+    else
+    {
+        self->setActive(false);
+    }
+}
+
 void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *whitePlayer)
 {
     float randX = 0.0f;
@@ -215,9 +275,9 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
 
     // 10 levels of ennemies 10 + the level per level
     // Generate white ennemies (left of the screen)
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for (int j = 0; j < 10 + i; j++)
+        for (int j = 0; j < 3 + i; j++)
         {
             randX = rand() % 960 - 960;
             randY = (randX < 0.0f) ? rand() % 50 - 75 : rand() % 50 + 1125.0f;
@@ -235,21 +295,20 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->setLayout(2);
             ennemy->setOnCollide(&ennemyCollide);
             ennemy->setTag("ew" + std::to_string(i + 1) + std::to_string(j));
-            //app.addCollisionPair("ew" + std::to_string(i + 1) + std::to_string(j), "whitePlayer");
+            app.addCollisionPair("ew" + std::to_string(i + 1) + std::to_string(j), "whitePlayer");
+            app.addCollisionPair("ew" + std::to_string(i + 1) + std::to_string(j), "blackbullet");
+             app.addCollisionPair("ew" + std::to_string(i + 1) + std::to_string(j), "whitebullet");
             if (i > 0)
                 ennemy->setActive(false);
             ennemy->setFunction(&ennemyMovement);
             app.addObjectTo(ennemy, GAME_SCENE);
         }
     }
-    app.addCollisionPair("whitePlayer", "ew1");
-    app.addCollisionPair("whitePlayer", "ew2");
-    app.addCollisionPair("whitePlayer", "ew3");
-    app.addCollisionPair("whitePlayer", "ew4");
+    
     // Generate black ennemies (right of the screen)
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for (int j = 0; j < 10 + i; j++)
+        for (int j = 0; j < 3 + i; j++)
         {
             randX = rand() % 960 + 960;
             randY = (randX > 1920.0f) ? rand() % 50 - 75 : rand() % 50 + 1125.0f;
@@ -267,7 +326,9 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->setLayout(2);
             ennemy->setOnCollide(&ennemyCollide);
             ennemy->setTag("eb" + std::to_string(i + 1) + std::to_string(j));
-            //app.addCollisionPair("eb" + std::to_string(i + 1) + std::to_string(j), "blackPlayer");
+            app.addCollisionPair("eb" + std::to_string(i + 1) + std::to_string(j), "blackPlayer");
+            app.addCollisionPair("eb" + std::to_string(i + 1) + std::to_string(j), "blackbullet");
+            app.addCollisionPair("eb" + std::to_string(i + 1) + std::to_string(j), "whitebullet");
             if (i > 0)
                 ennemy->setActive(false);
             ennemy->setFunction(&ennemyMovement);
@@ -295,4 +356,24 @@ void ennemyMovement(GameObject *self)
 void ennemyCollide(GameObject *self, GameObject *collided)
 {
     self->setActive(false);
+    collided->setActive(false);
+
+    if(collided->getTag() == "whitePlayer")
+    {
+        // TODO : Lose life
+    }
+    else if(collided->getTag() == "blackPlayer")
+    {
+        // TODO : Lose life
+    }
+    else if(collided->getTag() == "whitebullet")
+    {
+        //TextObject * blackPlayerScore = static_cast<TextObject *>(collided)->getObjects()[0];
+       // blackPlayerScore->setText(std::to_string(std::stoi(blackPlayerScore->getText()) + 1));
+    }
+    else if(collided->getTag() == "blackbullet")
+    {
+       // TextObject * whitePlayerScore = static_cast<TextObject *>(collided)->getObjects()[0];
+       // whitePlayerScore->setText(std::to_string(std::stoi(whitePlayerScore->getText()) + 1));
+    }
 }

@@ -16,7 +16,7 @@ void InitMenu(App &app);
 // Function : game.cpp
 void InitGame               (App &app);
 void initBlackPlayer        (DisplayableObject *blackPlayer, DisplayableObject * blackBullet);
-void initWhitePlayer        (DisplayableObject *whitePlayer);
+void initWhitePlayer        (DisplayableObject *whitePlayer, DisplayableObject * whiteBullet);
 void initBlackBackground    (DisplayableObject *blackBackground);
 void initWhiteBackground    (DisplayableObject *whiteBackground);
 void initEnnemies           (App &app, DisplayableObject *blackPlayer, DisplayableObject *whitePlayer);
@@ -27,6 +27,7 @@ void whitePlayerMovement    (GameObject *self);
 void blackPlayerMovement    (GameObject *self);
 void whitePlayerAttack      (GameObject *self);
 void blackPlayerAttack      (GameObject *self);
+void whiteBulletUpdate      (GameObject *self);
 void blackBulletUpdate      (GameObject *self);
 void ennemyCollide          (GameObject *self, GameObject *collided);
 
