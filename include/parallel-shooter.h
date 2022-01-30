@@ -23,6 +23,7 @@ void blackPlayerMovement    (GameObject *self);
 void initEnnemies           (App &app, DisplayableObject *blackPlayer, DisplayableObject *whitePlayer);
 void ennemyMovement         (GameObject *self);
 void whitePlayerMovement    (GameObject *self);
+void ennemyCollide          (GameObject *self, GameObject *collided);
 
 // Different scenes and their names
 #define MENU_SCENE ("menu")
