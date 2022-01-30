@@ -1,4 +1,5 @@
 #include "parallel-shooter.h"
+#include <unistd.h>
 
 // X = 220, Y = 120
 
@@ -7,7 +8,9 @@ static void playButtonComportment(GameObject *self)
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
     if (mousePosition.x >= 820 && mousePosition.x <= 1040)
         if (mousePosition.y >= 350 && mousePosition.y <= 470)
-            std::exit(100);
+            static_cast<DisplayableObject *>(self)->setTexture("img/playButtonHover.png");
+    else        
+        static_cast<DisplayableObject *>(self)->setTexture("img/playButton.png");
 }
 
 static void creditsButtonComportment(GameObject *self)
@@ -15,7 +18,9 @@ static void creditsButtonComportment(GameObject *self)
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
     if (mousePosition.x >= 820 && mousePosition.x <= 1040)
         if (mousePosition.y >= 475 && mousePosition.y <= 595)
-            std::exit(200);
+            static_cast<DisplayableObject *>(self)->setTexture("img/creditsButtonHover.png");
+    else
+        static_cast<DisplayableObject *>(self)->setTexture("img/creditsButton.png");
 }
 
 static void exitButtonComportment(GameObject *self)
@@ -23,7 +28,10 @@ static void exitButtonComportment(GameObject *self)
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
     if (mousePosition.x >= 820 && mousePosition.x <= 1040)
         if (mousePosition.y >= 600 && mousePosition.y <= 720)
-            std::exit(200);
+            static_cast<DisplayableObject *>(self)->setTexture("img/exitButtonHover.png");
+    else
+        static_cast<DisplayableObject *>(self)->setTexture("img/exitButton.png");
+
 }
 
 void InitMenu(App &app)
