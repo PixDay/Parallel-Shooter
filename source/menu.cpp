@@ -5,7 +5,7 @@
 static void playButtonComportment(GameObject *self)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
-    if (mousePosition.x <= 820 && mousePosition.x >= 1040)
+    if (mousePosition.x >= 820 && mousePosition.x <= 1040)
         if (mousePosition.y >= 350 && mousePosition.y <= 470)
             std::exit(100);
 }
@@ -13,7 +13,7 @@ static void playButtonComportment(GameObject *self)
 static void creditsButtonComportment(GameObject *self)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
-    if (mousePosition.x <= 820 && mousePosition.x >= 1040)
+    if (mousePosition.x >= 820 && mousePosition.x <= 1040)
         if (mousePosition.y >= 475 && mousePosition.y <= 595)
             std::exit(200);
 }
@@ -21,7 +21,9 @@ static void creditsButtonComportment(GameObject *self)
 static void exitButtonComportment(GameObject *self)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
-    std::exit(255);
+    if (mousePosition.x >= 820 && mousePosition.x <= 1040)
+        if (mousePosition.y >= 600 && mousePosition.y <= 720)
+            std::exit(200);
 }
 
 void InitMenu(App &app)
