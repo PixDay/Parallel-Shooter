@@ -40,6 +40,7 @@ void initBlackPlayer(DisplayableObject *blackPlayer)
     blackPlayer->setOrigin(origin);
     blackPlayer->setScale(scale);
     blackPlayer->setAngle(0.0f);
+    blackPlayer->setTag("blackPlayer");
 }
 
 void initWhitePlayer(DisplayableObject *whitePlayer)
@@ -52,6 +53,7 @@ void initWhitePlayer(DisplayableObject *whitePlayer)
     whitePlayer->setOrigin(origin);
     whitePlayer->setScale(scale);
     whitePlayer->setAngle(0.0f);
+    whitePlayer->setTag("whitePlayer");
 }
 
 void initWhiteBackground(DisplayableObject *whiteBackground)
@@ -161,7 +163,9 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->addObject(whitePlayer);
             ennemy->setSpeed(0.11f);
             ennemy->setLayout(2);
-            ennemy->setTag("ennemy_white_" + std::to_string(i + 1));
+            ennemy->setOnCollide(&ennemyCollide);
+            ennemy->setTag("ennemy_white_" + std::to_string(i + 1) + std::to_string(j));
+            app.addCollisionPair("ennemy_white_" + std::to_string(i + 1) + std::to_string(j), "whitePlayer");
             if (i > 0)
                 ennemy->setActive(false);
             ennemy->setFunction(&ennemyMovement);
@@ -187,7 +191,9 @@ void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *w
             ennemy->addObject(blackPlayer);
             ennemy->setSpeed(0.11f);
             ennemy->setLayout(2);
-            ennemy->setTag("ennemy_black_" + std::to_string(i + 1));
+            ennemy->setOnCollide(&ennemyCollide);
+            ennemy->setTag("ennemy_black_" + std::to_string(i + 1) + std::to_string(j));
+            app.addCollisionPair("ennemy_black_" + std::to_string(i + 1) + std::to_string(j), "blackPlayer");
             if (i > 0)
                 ennemy->setActive(false);
             ennemy->setFunction(&ennemyMovement);
@@ -210,4 +216,9 @@ void ennemyMovement(GameObject *self)
     else
         position.y += self->getSpeed();
     static_cast<DisplayableObject *>(self)->setPosition(position);
+}
+
+void ennemyCollide(GameObject *self, GameObject *collided)
+{
+    self->setActive(false);
 }
