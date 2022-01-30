@@ -4,33 +4,35 @@
 
 void InitGame(App &app)
 {
-    DisplayableObject *blackPlayer = new DisplayableObject("img/black-player.png");
-    DisplayableObject *whitePlayer = new DisplayableObject("img/white-player.png");
+    DisplayableObject *blackPlayer = new DisplayableObject("img/black-player.png", &blackPlayerUpdate);
+    DisplayableObject *whitePlayer = new DisplayableObject("img/white-player.png", &whitePlayerUpdate);
     DisplayableObject *blackBackground = new DisplayableObject("img/black-background.png");
     DisplayableObject *whiteBackground = new DisplayableObject("img/white-background.png");
 
-    initBlackPlayer(blackPlayer);
+    DisplayableObject *blackBullet = new DisplayableObject("img/black-bullet.png", &blackBulletUpdate);
+
+    initBlackPlayer(blackPlayer, blackBullet);
     initWhitePlayer(whitePlayer);
     initBlackBackground(blackBackground);
     initWhiteBackground(whiteBackground);
     initEnnemies(app, blackPlayer, whitePlayer);
-  
-    blackPlayer->setFunction(&blackPlayerMovement);
-
-    whitePlayer->setFunction(&whitePlayerMovement);
+    
 
     blackBackground->setLayout(1);
     whiteBackground->setLayout(1);
     whitePlayer->setLayout(2);
     blackPlayer->setLayout(2);
+
     app.addObjectTo(blackBackground, GAME_SCENE);
     app.addObjectTo(whiteBackground, GAME_SCENE);
+
     app.addObjectTo(blackPlayer, GAME_SCENE);
-    app.addObjectTo(whitePlayer, GAME_SCENE);
-    
+    app.addObjectTo(whitePlayer, GAME_SCENE);  
+
+    app.addObjectTo(blackBullet, GAME_SCENE);  
 }
 
-void initBlackPlayer(DisplayableObject *blackPlayer)
+void initBlackPlayer(DisplayableObject *blackPlayer, DisplayableObject * blackBullet)
 {
     sf::Vector2f position = {1390.0f, 490.0f};
     sf::Vector2f origin = {50.0f, 50.0f};
@@ -40,6 +42,8 @@ void initBlackPlayer(DisplayableObject *blackPlayer)
     blackPlayer->setOrigin(origin);
     blackPlayer->setScale(scale);
     blackPlayer->setAngle(0.0f);
+    
+    blackPlayer->addObject(blackBullet);
 }
 
 void initWhitePlayer(DisplayableObject *whitePlayer)
@@ -54,11 +58,38 @@ void initWhitePlayer(DisplayableObject *whitePlayer)
     whitePlayer->setAngle(0.0f);
 }
 
+void initBlackBackground(DisplayableObject *blackBackground)
+{
+    sf::Vector2f position = {0.0f, 0.0f};
+
+    blackBackground->setPosition(position);
+}
+
 void initWhiteBackground(DisplayableObject *whiteBackground)
 {
     sf::Vector2f position = {960.0f, 0.0f};
 
     whiteBackground->setPosition(position);
+}
+
+void whitePlayerUpdate(GameObject *self)
+{
+    whitePlayerMovement(self);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+    {
+        whitePlayerAttack(self);
+    }
+}
+
+void blackPlayerUpdate(GameObject *self)
+{
+    blackPlayerMovement(self);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+       blackPlayerAttack(self);
+    }
 }
 
 void whitePlayerMovement(GameObject *self)
@@ -94,14 +125,6 @@ void whitePlayerMovement(GameObject *self)
     static_cast<DisplayableObject *>(self)->setPosition(position);
 }
 
-
-void initBlackBackground(DisplayableObject *blackBackground)
-{
-    sf::Vector2f position = {0.0f, 0.0f};
-
-    blackBackground->setPosition(position);
-}
-
 void blackPlayerMovement(GameObject *self)
 {
     sf::Vector2f position = self->getPosition();
@@ -134,6 +157,53 @@ void blackPlayerMovement(GameObject *self)
     position.y = (position.y < minY) ? minY : (position.y > maxY) ? maxY : position.y;
 
     static_cast<DisplayableObject *>(self)->setPosition(position);
+}
+
+void whitePlayerAttack(GameObject *self)
+{
+    std::cout << "white attacked" << std::endl;
+}
+
+void blackPlayerAttack(GameObject *self)
+{
+    DisplayableObject * bullet = static_cast<DisplayableObject *>(self)->getObjects()[0];
+    bullet->setActive(true);
+    sf::Vector2f position = {self->getPosition().x, self->getPosition().y};
+    sf::Vector2f origin = {3.0f, 8.0f};
+
+    bullet->setPosition(position);
+    bullet->setOrigin(origin);
+    bullet->setAngle(static_cast<DisplayableObject *>(self)->getAngle());
+    bullet->setSpeed(10.f);
+    bullet->setLayout(3);
+    bullet->setTag("bullet_black_bullet");
+}
+
+void blackBulletUpdate(GameObject *self)
+{
+    sf::Vector2f position = self->getPosition();
+    sf::Vector2f vector = {0.0f, 0.0f};
+
+    // Calculate the vector based on angle of black player
+    vector.x = - sin(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+    vector.y = cos(static_cast<DisplayableObject *>(self)->getAngle() * 3.1415 / 180.0f);
+
+    position.y -= self->getSpeed() * vector.y;
+    position.x -= self->getSpeed() * vector.x;
+
+    static_cast<DisplayableObject *>(self)->setPosition(position);
+
+    const float minX = 960.f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxX = 1920.f - PLAYER_SIZE_PIXEL / 4.f;
+    const float minY = 0.0f + PLAYER_SIZE_PIXEL / 4.f;
+    const float maxY = 1080.0f - PLAYER_SIZE_PIXEL / 4.f;
+
+    if(position.x > minX && position.x < maxX && position.y > minY && position.y < maxY)
+    {
+      self->setActive(true); 
+    }else{
+        self->setActive(false);
+    }
 }
 
 void initEnnemies(App &app, DisplayableObject *blackPlayer, DisplayableObject *whitePlayer)
