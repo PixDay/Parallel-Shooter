@@ -3,6 +3,7 @@
 #include "core.h"
 
 /* FUNCTIONS */
+void *myApp();
 
 // Function : main.cpp
 

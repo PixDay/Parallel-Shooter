@@ -6,9 +6,11 @@
 static void playButtonComportment(GameObject *self)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
-    if (mousePosition.x >= 820 && mousePosition.x <= 1040)
-        if (mousePosition.y >= 350 && mousePosition.y <= 470)
-            static_cast<DisplayableObject *>(self)->setTexture("img/playButtonHover.png");
+    if (mousePosition.x >= 820 && mousePosition.x <= 1040 && mousePosition.y >= 350 && mousePosition.y <= 470) {
+        static_cast<DisplayableObject *>(self)->setTexture("img/playButtonHover.png");
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            static_cast<App *>(myApp())->setCurrentScene(GAME_SCENE);
+    }
     else        
         static_cast<DisplayableObject *>(self)->setTexture("img/playButton.png");
 }
@@ -16,9 +18,12 @@ static void playButtonComportment(GameObject *self)
 static void creditsButtonComportment(GameObject *self)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
-    if (mousePosition.x >= 820 && mousePosition.x <= 1040)
-        if (mousePosition.y >= 475 && mousePosition.y <= 595)
-            static_cast<DisplayableObject *>(self)->setTexture("img/creditsButtonHover.png");
+    if (mousePosition.x >= 820 && mousePosition.x <= 1040 && mousePosition.y >= 475 && mousePosition.y <= 595)
+    {
+        static_cast<DisplayableObject *>(self)->setTexture("img/creditsButtonHover.png");
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            static_cast<App *>(myApp())->setCurrentScene(CREDITS_SCENE);
+    }
     else
         static_cast<DisplayableObject *>(self)->setTexture("img/creditsButton.png");
 }
@@ -26,9 +31,12 @@ static void creditsButtonComportment(GameObject *self)
 static void exitButtonComportment(GameObject *self)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition();
-    if (mousePosition.x >= 820 && mousePosition.x <= 1040)
-        if (mousePosition.y >= 600 && mousePosition.y <= 720)
-            static_cast<DisplayableObject *>(self)->setTexture("img/exitButtonHover.png");
+    if (mousePosition.x >= 820 && mousePosition.x <= 1040 && mousePosition.y >= 600 && mousePosition.y <= 720)
+    {
+        static_cast<DisplayableObject *>(self)->setTexture("img/exitButtonHover.png");
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            self->setTag(STOP_RUN);
+    }
     else
         static_cast<DisplayableObject *>(self)->setTexture("img/exitButton.png");
 
