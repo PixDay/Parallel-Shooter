@@ -1,9 +1,11 @@
 #include "parallel-shooter.h"
 
+void *Gapp;
+
 int main()
 {
     App app = App();
-    
+    Gapp = &app;
     // Create scenes
     CreateScenes(app);
 
@@ -16,4 +18,8 @@ int main()
     return 0;
 }
 
+void *myApp()
+{
+    return Gapp;
+}
 //cmake --build . -j8
